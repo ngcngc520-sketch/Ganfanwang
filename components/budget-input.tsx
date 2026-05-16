@@ -43,6 +43,8 @@ interface BudgetInputProps {
 
 export function BudgetInput({ onSubmit }: BudgetInputProps) {
   const [budget, setBudget] = useState(150)
+  const [customBudget, setCustomBudget] = useState("")
+  const [isCustomInput, setIsCustomInput] = useState(false)
   const [city, setCity] = useState("台北市")
   const [district, setDistrict] = useState("大安區")
   const [diet, setDiet] = useState("any")
@@ -52,11 +54,30 @@ export function BudgetInput({ onSubmit }: BudgetInputProps) {
 
   const cityRef = useRef<HTMLDivElement>(null)
   const districtRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleCityChange = (newCity: string) => {
     setCity(newCity)
     setDistrict(locations[newCity][0])
     setShowCityPicker(false)
+  }
+
+  const handleBudgetSelect = (option: number) => {
+    setBudget(option)
+    setCustomBudget("")
+    setIsCustomInput(false)
+  }
+
+  const handleCustomBudgetChange = (value: string) => {
+    const numValue = value.replace(/[^0-9]/g, "")
+    setCustomBudget(numValue)
+    if (numValue) {
+      setBudget(parseInt(numValue, 10))
+    }
+  }
+
+  const handleCustomInputFocus = () => {
+    setIsCustomInput(true)
   }
 
   const handleSubmit = () => {
@@ -106,18 +127,41 @@ export function BudgetInput({ onSubmit }: BudgetInputProps) {
             <label className="flex items-center gap-2 text-sm font-medium text-foreground">
               <span className="text-base">💰</span> 今日預算
             </label>
-            <div className="flex items-center justify-center bg-muted rounded-xl p-3 mb-2">
-              <span className="text-3xl font-bold text-primary">{budget}</span>
-              <span className="text-lg text-muted-foreground ml-1">元</span>
+            <div 
+              className="flex items-center justify-center bg-muted rounded-xl p-3 mb-2 cursor-text"
+              onClick={() => inputRef.current?.focus()}
+            >
+              {isCustomInput || customBudget ? (
+                <div className="flex items-center">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={customBudget}
+                    onChange={(e) => handleCustomBudgetChange(e.target.value)}
+                    onFocus={handleCustomInputFocus}
+                    placeholder="輸入金額"
+                    className="w-20 text-3xl font-bold text-primary bg-transparent text-center outline-none placeholder:text-primary/40"
+                    autoFocus={isCustomInput}
+                  />
+                  <span className="text-lg text-muted-foreground ml-1">元</span>
+                </div>
+              ) : (
+                <>
+                  <span className="text-3xl font-bold text-primary">{budget}</span>
+                  <span className="text-lg text-muted-foreground ml-1">元</span>
+                </>
+              )}
             </div>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-5 gap-2">
               {budgetOptions.map((option) => (
                 <motion.button
                   key={option}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setBudget(option)}
+                  onClick={() => handleBudgetSelect(option)}
                   className={`py-2 px-2 rounded-lg text-sm font-medium transition-all ${
-                    budget === option
+                    budget === option && !isCustomInput
                       ? "bg-primary text-primary-foreground shadow-md"
                       : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                   }`}
@@ -125,6 +169,21 @@ export function BudgetInput({ onSubmit }: BudgetInputProps) {
                   {option}
                 </motion.button>
               ))}
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setIsCustomInput(true)
+                  setCustomBudget("")
+                  setTimeout(() => inputRef.current?.focus(), 50)
+                }}
+                className={`py-2 px-2 rounded-lg text-sm font-medium transition-all ${
+                  isCustomInput
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                自訂
+              </motion.button>
             </div>
           </div>
 
