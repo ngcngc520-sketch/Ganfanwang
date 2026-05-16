@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Noto_Sans_TC, Inter } from 'next/font/google'
 import './globals.css'
+import { AuthProvider } from '@/contexts/auth-context'
 
 const notoSansTC = Noto_Sans_TC({ 
   subsets: ['latin'],
@@ -44,7 +45,9 @@ export default function RootLayout({
   return (
     <html lang="zh-TW" className="bg-background">
       <body className={`${notoSansTC.variable} ${inter.variable} font-sans antialiased`}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )

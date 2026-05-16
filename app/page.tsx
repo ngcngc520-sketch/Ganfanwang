@@ -4,6 +4,10 @@ import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { BudgetInput } from "@/components/budget-input"
 import { MealResult } from "@/components/meal-result"
+import { AuthModal } from "@/components/auth-modal"
+import { StoreUploadModal } from "@/components/store-upload-modal"
+import { FavoritesModal } from "@/components/favorites-modal"
+import { UserMenu } from "@/components/user-menu"
 
 interface GoogleReview {
   author: string
@@ -264,6 +268,9 @@ export default function HomePage() {
   const [currentGoal, setCurrentGoal] = useState("save")
   const [currentBudget, setCurrentBudget] = useState(150)
   const [mealIndex, setMealIndex] = useState(0)
+  const [showAuth, setShowAuth] = useState(false)
+  const [showUpload, setShowUpload] = useState(false)
+  const [showFavorites, setShowFavorites] = useState(false)
 
   const handleSubmit = (data: { budget: number; city: string; district: string; diet: string; goal: string }) => {
     setCurrentBudget(data.budget)
@@ -291,39 +298,65 @@ export default function HomePage() {
   const analysis = analysisData[currentGoal] || analysisData.save
 
   return (
-    <main className="min-h-screen bg-background py-6 pb-safe">
-      <AnimatePresence mode="wait">
-        {!showResult ? (
-          <motion.div
-            key="input"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.3 }}
-          >
-            <BudgetInput onSubmit={handleSubmit} />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="result"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <MealResult
-              budget={currentBudget}
-              meals={meals}
-              totalSpent={totalSpent}
-              satiety={analysis.satiety}
-              nutrition={analysis.nutrition}
-              suggestions={analysis.suggestions}
-              onRefresh={handleRefresh}
-              onBack={handleBack}
-              onAdjustGoal={handleAdjustGoal}
-            />
-          </motion.div>
+    <main className="min-h-screen bg-background pb-safe">
+      {/* Top navbar */}
+      <div className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border">
+        <div className="max-w-md mx-auto px-4 h-12 flex items-center justify-between">
+          <span className="font-bold text-sm text-foreground">幹飯王</span>
+          <UserMenu
+            onShowFavorites={() => setShowFavorites(true)}
+            onShowUpload={() => setShowUpload(true)}
+            onShowAuth={() => setShowAuth(true)}
+          />
+        </div>
+      </div>
+
+      <div className="py-6">
+        <AnimatePresence mode="wait">
+          {!showResult ? (
+            <motion.div
+              key="input"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.3 }}
+            >
+              <BudgetInput onSubmit={handleSubmit} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="result"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <MealResult
+                budget={currentBudget}
+                meals={meals}
+                totalSpent={totalSpent}
+                satiety={analysis.satiety}
+                nutrition={analysis.nutrition}
+                suggestions={analysis.suggestions}
+                onRefresh={handleRefresh}
+                onBack={handleBack}
+                onAdjustGoal={handleAdjustGoal}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Modals */}
+      <AnimatePresence>
+        {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+        {showUpload && (
+          <StoreUploadModal
+            onClose={() => setShowUpload(false)}
+            onSuccess={() => {}}
+          />
         )}
+        {showFavorites && <FavoritesModal onClose={() => setShowFavorites(false)} />}
       </AnimatePresence>
     </main>
   )
