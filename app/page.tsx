@@ -25,7 +25,6 @@ interface MealData {
   reviewCount: number
   status: "open" | "closing" | "closed"
   tags: string[]
-  imageUrl: string
   googleMapUrl: string
   reviews: GoogleReview[]
   partnerDeal?: string
@@ -38,7 +37,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "breakfast", emoji: "🍳", label: "早餐", store: "永和豆漿", item: "蛋餅 + 豆漿", 
         price: 40, distance: "150m", rating: 4.2, googleRating: 4.3, reviewCount: 328, status: "open", 
         tags: ["高CP值", "學生熱門"],
-        imageUrl: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=永和豆漿",
         reviews: [
           { author: "王小明", rating: 5, text: "豆漿超濃郁，蛋餅酥脆好吃！價格實惠，學生的好朋友。", time: "2週前" },
@@ -50,7 +48,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "lunch", emoji: "🍱", label: "午餐", store: "阿婆自助餐", item: "2菜1肉組合", 
         price: 70, distance: "280m", rating: 4.0, googleRating: 4.1, reviewCount: 512, status: "open", 
         tags: ["分量足", "便宜"],
-        imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=自助餐",
         reviews: [
           { author: "張小華", rating: 4, text: "菜色多樣，價格便宜，適合天天來吃。", time: "1週前" },
@@ -62,7 +59,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "dinner", emoji: "🍜", label: "晚餐", store: "老王麵店", item: "陽春麵", 
         price: 35, distance: "180m", rating: 4.1, googleRating: 4.2, reviewCount: 267, status: "open", 
         tags: ["便宜首選", "湯頭讚"],
-        imageUrl: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=麵店",
         reviews: [
           { author: "吳大明", rating: 5, text: "湯頭清甜，麵條Q彈，35元超值！", time: "3天前" },
@@ -76,7 +72,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "breakfast", emoji: "🍳", label: "早餐", store: "美而美", item: "總匯三明治", 
         price: 45, distance: "200m", rating: 4.3, googleRating: 4.4, reviewCount: 445, status: "open", 
         tags: ["份量大", "學生愛"],
-        imageUrl: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=美而美早餐",
         reviews: [
           { author: "劉小明", rating: 5, text: "三明治料超多，吃得很飽！", time: "1週前" },
@@ -89,7 +84,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "lunch", emoji: "🍱", label: "午餐", store: "便當街", item: "排骨便當", 
         price: 65, distance: "350m", rating: 4.2, googleRating: 4.3, reviewCount: 389, status: "open", 
         tags: ["經典款", "飯多"],
-        imageUrl: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=便當店",
         reviews: [
           { author: "李志明", rating: 5, text: "排骨炸得酥脆，飯量超多！", time: "5天前" },
@@ -101,7 +95,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "dinner", emoji: "🍜", label: "晚餐", store: "巷口滷味", item: "滷味拼盤", 
         price: 40, distance: "120m", rating: 4.4, googleRating: 4.5, reviewCount: 623, status: "closing", 
         tags: ["宵夜首選", "可自選"],
-        imageUrl: "https://images.unsplash.com/photo-1555126634-323283e090fa?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=滷味攤",
         reviews: [
           { author: "周小芬", rating: 5, text: "滷汁入味，百吃不膩！", time: "2天前" },
@@ -117,7 +110,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "breakfast", emoji: "🍳", label: "早餐", store: "早安美芝城", item: "培根蛋餅 + 大冰奶", 
         price: 55, distance: "180m", rating: 4.3, googleRating: 4.4, reviewCount: 567, status: "open", 
         tags: ["份量大", "飽足感"],
-        imageUrl: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=早安美芝城",
         reviews: [
           { author: "陳小明", rating: 5, text: "培根超多片，蛋餅很大份！", time: "3天前" },
@@ -129,7 +121,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "lunch", emoji: "🍱", label: "午餐", store: "家樂福自助餐", item: "3菜1肉組合", 
         price: 85, distance: "300m", rating: 4.1, googleRating: 4.2, reviewCount: 412, status: "open", 
         tags: ["選擇多", "吃到飽感"],
-        imageUrl: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=自助餐",
         reviews: [
           { author: "張志明", rating: 4, text: "菜色選擇超多，每天都有不同菜。", time: "5天前" },
@@ -142,7 +133,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "dinner", emoji: "🍜", label: "晚餐", store: "牛肉麵大王", item: "紅燒牛肉麵", 
         price: 95, distance: "250m", rating: 4.5, googleRating: 4.6, reviewCount: 892, status: "open", 
         tags: ["大碗滿意", "肉多"],
-        imageUrl: "https://images.unsplash.com/photo-1555126634-323283e090fa?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=牛肉麵",
         reviews: [
           { author: "周小芬", rating: 5, text: "牛肉軟嫩，湯頭濃郁，超讚！", time: "1天前" },
@@ -156,7 +146,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "breakfast", emoji: "🍳", label: "早餐", store: "麥味登", item: "起司豬排堡 + 紅茶", 
         price: 60, distance: "220m", rating: 4.4, googleRating: 4.5, reviewCount: 678, status: "open", 
         tags: ["超飽", "肉多"],
-        imageUrl: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=麥味登",
         reviews: [
           { author: "李小明", rating: 5, text: "豬排厚實多汁，起司融化超香！", time: "2天前" },
@@ -169,7 +158,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "lunch", emoji: "🍱", label: "午餐", store: "池上便當", item: "雞腿便當", 
         price: 90, distance: "280m", rating: 4.3, googleRating: 4.4, reviewCount: 534, status: "open", 
         tags: ["大雞腿", "飯量足"],
-        imageUrl: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=池上便當",
         reviews: [
           { author: "張大華", rating: 5, text: "雞腿炸得金黃酥脆，超好吃！", time: "3天前" },
@@ -181,7 +169,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "dinner", emoji: "🍜", label: "晚餐", store: "阿宏炒飯", item: "招牌炒飯 + 蛋花湯", 
         price: 80, distance: "150m", rating: 4.2, googleRating: 4.3, reviewCount: 445, status: "open", 
         tags: ["份量驚人", "在地推薦"],
-        imageUrl: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=炒飯店",
         reviews: [
           { author: "周小芬", rating: 5, text: "炒飯粒粒分明，鑊氣十足！", time: "4天前" },
@@ -197,7 +184,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "breakfast", emoji: "🍳", label: "早餐", store: "Subway", item: "蔬菜潛艇堡 6吋", 
         price: 75, distance: "400m", rating: 4.1, googleRating: 4.2, reviewCount: 345, status: "open", 
         tags: ["低卡", "蔬菜多"],
-        imageUrl: "https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=Subway",
         reviews: [
           { author: "陳小明", rating: 4, text: "蔬菜新鮮，醬料可以自己選。", time: "1週前" },
@@ -209,7 +195,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "lunch", emoji: "🍱", label: "午餐", store: "健康便當", item: "雞胸肉便當", 
         price: 95, distance: "350m", rating: 4.4, googleRating: 4.5, reviewCount: 567, status: "open", 
         tags: ["高蛋白", "少油"],
-        imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=健康便當",
         reviews: [
           { author: "張志明", rating: 5, text: "雞胸肉嫩又不柴，健身必吃！", time: "3天前" },
@@ -222,7 +207,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "dinner", emoji: "🍜", label: "晚餐", store: "蔬食小館", item: "蔬菜湯麵", 
         price: 65, distance: "280m", rating: 4.2, googleRating: 4.3, reviewCount: 298, status: "closing", 
         tags: ["清爽", "蔬菜滿滿"],
-        imageUrl: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=蔬食餐廳",
         reviews: [
           { author: "周小芬", rating: 5, text: "湯頭清甜，蔬菜超多種！", time: "5天前" },
@@ -236,7 +220,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "breakfast", emoji: "🍳", label: "早餐", store: "早午餐店", item: "燕麥粥 + 水果", 
         price: 70, distance: "320m", rating: 4.3, googleRating: 4.4, reviewCount: 234, status: "open", 
         tags: ["健康", "纖維多"],
-        imageUrl: "https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=早午餐",
         reviews: [
           { author: "李小明", rating: 5, text: "燕麥粥綿密，水果很新鮮！", time: "4天前" },
@@ -248,7 +231,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "lunch", emoji: "🍱", label: "午餐", store: "沙拉吧", item: "雞肉凱薩沙拉", 
         price: 110, distance: "380m", rating: 4.5, googleRating: 4.6, reviewCount: 678, status: "open", 
         tags: ["低GI", "高蛋白"],
-        imageUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=沙拉店",
         reviews: [
           { author: "張大華", rating: 5, text: "蔬菜超新鮮，雞肉很嫩！", time: "2天前" },
@@ -260,7 +242,6 @@ const mealDatabase: Record<string, MealData[][]> = {
         type: "dinner", emoji: "🍜", label: "晚餐", store: "日式定食", item: "烤魚定食", 
         price: 120, distance: "420m", rating: 4.4, googleRating: 4.5, reviewCount: 512, status: "open", 
         tags: ["omega-3", "均衡"],
-        imageUrl: "https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=400&h=300&fit=crop",
         googleMapUrl: "https://maps.google.com/?q=日式定食",
         reviews: [
           { author: "周小芬", rating: 5, text: "烤魚外酥內嫩，配菜精緻！", time: "3天前" },

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { MapPin, Star, Clock, RefreshCw, Search, TrendingDown, Utensils, Heart, AlertTriangle, ExternalLink, Map, Tag, X, ChevronRight } from "lucide-react"
+import { MapPin, Star, Clock, RefreshCw, Search, TrendingDown, Utensils, Heart, AlertTriangle, ExternalLink, Map, Tag, X, ChevronRight, ImageIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -28,7 +28,6 @@ interface Meal {
   reviewCount: number
   status: "open" | "closing" | "closed"
   tags: string[]
-  imageUrl: string
   googleMapUrl: string
   reviews: GoogleReview[]
   partnerDeal?: string
@@ -50,6 +49,111 @@ const statusConfig = {
   open: { label: "營業中", color: "text-success", bg: "bg-success/10" },
   closing: { label: "即將打烊", color: "text-warning", bg: "bg-warning/10" },
   closed: { label: "已打烊", color: "text-destructive", bg: "bg-destructive/10" },
+}
+
+// Generate a consistent hash from string for stable image selection
+function hashCode(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash
+  }
+  return Math.abs(hash)
+}
+
+// Get meal category keyword for image search
+function getMealCategory(type: "breakfast" | "lunch" | "dinner"): string {
+  switch (type) {
+    case "breakfast": return "breakfast,food"
+    case "lunch": return "lunch,asian,food"
+    case "dinner": return "dinner,noodles,food"
+  }
+}
+
+// Generate loremflickr URL with consistent hash
+function getFlickrImageUrl(itemName: string, mealType: "breakfast" | "lunch" | "dinner"): string {
+  const hash = hashCode(itemName + mealType)
+  const category = getMealCategory(mealType)
+  return `https://loremflickr.com/400/300/${category}?lock=${hash}`
+}
+
+// Generate Google Image search URL
+function getGoogleImageSearchUrl(itemName: string): string {
+  const query = encodeURIComponent(`${itemName} 台灣 食物`)
+  return `https://www.google.com/search?tbm=isch&q=${query}`
+}
+
+// Meal Image Component with dynamic loading, hover overlay, and fallback
+function MealImage({ 
+  itemName, 
+  mealType, 
+  partnerDeal 
+}: { 
+  itemName: string
+  mealType: "breakfast" | "lunch" | "dinner"
+  partnerDeal?: string 
+}) {
+  const [imageError, setImageError] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  
+  const flickrUrl = getFlickrImageUrl(itemName, mealType)
+  const googleSearchUrl = getGoogleImageSearchUrl(itemName)
+
+  if (imageError) {
+    return (
+      <a
+        href={googleSearchUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="relative w-full h-32 rounded-lg overflow-hidden mb-3 bg-muted flex flex-col items-center justify-center gap-2 hover:bg-muted/80 transition-colors"
+      >
+        <ImageIcon className="w-8 h-8 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground">點擊搜尋圖片</span>
+      </a>
+    )
+  }
+
+  return (
+    <a
+      href={googleSearchUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="relative w-full h-32 rounded-lg overflow-hidden mb-3 block"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={() => setIsHovered(true)}
+      onTouchEnd={() => setIsHovered(false)}
+    >
+      <Image
+        src={flickrUrl}
+        alt={itemName}
+        fill
+        className="object-cover transition-transform duration-300"
+        style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
+        onError={() => setImageError(true)}
+        unoptimized
+      />
+      
+      {/* Hover Overlay */}
+      <div 
+        className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
+      >
+        <div className="text-white text-center px-4">
+          <Search className="w-5 h-5 mx-auto mb-1" />
+          <span className="text-xs">在 Google 搜尋更多圖片</span>
+        </div>
+      </div>
+
+      {/* Partner Deal Badge */}
+      {partnerDeal && (
+        <div className="absolute top-2 left-2 bg-accent text-accent-foreground px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
+          <Tag className="w-3 h-3" />
+          {partnerDeal}
+        </div>
+      )}
+    </a>
+  )
 }
 
 function ReviewModal({ reviews, storeName, onClose }: { reviews: GoogleReview[], storeName: string, onClose: () => void }) {
@@ -174,21 +278,12 @@ export function MealResult({
                 </div>
               </CardHeader>
               <CardContent className="p-3">
-                {/* Store Image */}
-                <div className="relative w-full h-32 rounded-lg overflow-hidden mb-3">
-                  <Image
-                    src={meal.imageUrl}
-                    alt={meal.item}
-                    fill
-                    className="object-cover"
-                  />
-                  {meal.partnerDeal && (
-                    <div className="absolute top-2 left-2 bg-accent text-accent-foreground px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                      <Tag className="w-3 h-3" />
-                      {meal.partnerDeal}
-                    </div>
-                  )}
-                </div>
+                {/* Dynamic Meal Image */}
+                <MealImage 
+                  itemName={meal.item} 
+                  mealType={meal.type} 
+                  partnerDeal={meal.partnerDeal} 
+                />
 
                 <div className="flex items-start justify-between mb-2">
                   <div>
@@ -197,7 +292,7 @@ export function MealResult({
                       <span className="font-medium text-foreground text-sm">{meal.store}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-base">{meal.type === "breakfast" ? "🥪" : meal.type === "lunch" ? "🍛" : "🍜"}</span>
+                      <span className="text-base">{meal.type === "breakfast" ? "🥪" : meal.type === "lunch" ? "���" : "🍜"}</span>
                       <span className="text-muted-foreground text-sm">{meal.item}</span>
                     </div>
                   </div>
