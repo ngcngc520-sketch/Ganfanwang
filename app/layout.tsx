@@ -1,26 +1,25 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
+import { Noto_Sans_TC, Inter } from 'next/font/google'
 import './globals.css'
+
+const notoSansTC = Noto_Sans_TC({ 
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-noto'
+})
 
 const inter = Inter({ 
   subsets: ['latin'],
   variable: '--font-inter'
 })
 
-const playfair = Playfair_Display({ 
-  subsets: ['latin'],
-  variable: '--font-playfair'
-})
-
 export const metadata: Metadata = {
-  title: 'Alex Chen — Digital Product Designer',
-  description: 'Independent digital product designer crafting thoughtful interfaces and experiences. Specializing in brand identity, UI/UX design, and creative direction.',
-  keywords: ['designer', 'product design', 'UI/UX', 'brand identity', 'portfolio'],
-  authors: [{ name: 'Alex Chen' }],
+  title: '今日炫什麼 — 預算版',
+  description: '用最少的錢，吃最合理的一天。智慧規劃你的三餐預算，找到最划算的美食組合。',
+  keywords: ['預算', '省錢', '美食', '三餐', '學生', '台灣'],
   openGraph: {
-    title: 'Alex Chen — Digital Product Designer',
-    description: 'Independent digital product designer crafting thoughtful interfaces and experiences.',
+    title: '今日炫什麼 — 預算版',
+    description: '用最少的錢，吃最合理的一天',
     type: 'website',
   },
 }
@@ -29,7 +28,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  themeColor: '#f7f5f3',
+  themeColor: '#f5f3f0',
 }
 
 export default function RootLayout({
@@ -38,10 +37,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="bg-background">
-      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
+    <html lang="zh-TW" className="bg-background">
+      <body className={`${notoSansTC.variable} ${inter.variable} font-sans antialiased`}>
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )
